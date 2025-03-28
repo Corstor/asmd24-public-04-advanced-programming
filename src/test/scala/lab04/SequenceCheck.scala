@@ -18,7 +18,6 @@ object SequenceCheck extends Properties("Sequence"):
 
   // define custom arbitrary lists and mappers
   given intSeqArbitrary: Arbitrary[Sequence[Int]] = Arbitrary(sequenceGen[Int]())
-  given mapperArbitrary: Arbitrary[Int => Int] = Arbitrary(Gen.oneOf[Int => Int]( _+1, _*2, x => x*x))
 
   // check axioms, universally
   property("mapAxioms") =
@@ -49,7 +48,6 @@ object SequenceCheck extends Properties("Sequence"):
       
   property("flatMapAxioms") =
     forAll: (seq: Sequence[Int], f: Int => Sequence[Int]) =>
-      println(f(10))
       (seq, f) match
         case (Nil(), f) => flatMap(seq)(f) == Nil()
         case (Cons(h, t), f) => flatMap(seq)(f) == concat(f(h))(t.flatMap(f))      
