@@ -27,6 +27,16 @@ object Sequences:
         case Cons(_, t)            => t.filter(pred)
         case Nil()                 => Nil()
 
+      def concat(other: Sequence[A]): Sequence[A] = s match
+        case Cons(head, tail) => Cons(head, tail.concat(other))
+        case Nil() => other
+
+      def flatMap[B](mapper: A => Sequence[B]): Sequence[B] = s match
+        case Cons(head, tail) => mapper(head).concat(tail.flatMap(mapper))
+        case Nil() => Nil()
+      
+
+
 @main def trySequences() =
   import Sequences.*
   import Sequence.*
